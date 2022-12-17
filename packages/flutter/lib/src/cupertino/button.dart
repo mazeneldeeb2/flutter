@@ -233,9 +233,11 @@ class _CupertinoButtonState extends State<CupertinoButton> with SingleTickerProv
     final bool enabled = widget.enabled;
     final CupertinoThemeData themeData = CupertinoTheme.of(context);
     final Color primaryColor = themeData.primaryColor;
+    print('justin about to resolve button color');
     final Color? backgroundColor = widget.color == null
       ? (widget._filled ? primaryColor : null)
       : CupertinoDynamicColor.maybeResolve(widget.color, context);
+    print('justin resolved button color to: $backgroundColor');
 
     final Color foregroundColor = backgroundColor != null
       ? themeData.primaryContrastingColor

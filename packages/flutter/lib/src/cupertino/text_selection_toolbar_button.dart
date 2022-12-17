@@ -8,6 +8,7 @@ import 'button.dart';
 import 'colors.dart';
 import 'debug.dart';
 import 'localizations.dart';
+import 'theme.dart';
 
 const TextStyle _kToolbarButtonFontStyle = TextStyle(
   inherit: false,
@@ -124,6 +125,7 @@ class CupertinoTextSelectionToolbarButton extends StatelessWidget {
        ),
      );
 
+    print('justin building CupertinoTextSelectionToolbarButton with brightness ${CupertinoTheme.of(context).brightness}');
     return CupertinoButton(
       borderRadius: null,
       color: _kToolbarBackgroundColor,

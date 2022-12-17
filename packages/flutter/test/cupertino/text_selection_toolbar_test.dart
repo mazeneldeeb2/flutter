@@ -61,8 +61,8 @@ class TestBox extends SizedBox {
 }
 
 const CupertinoDynamicColor _kToolbarBackgroundColor = CupertinoDynamicColor.withBrightness(
-  color: Color(0xEB202020),
-  darkColor: Color(0xEBF7F7F7),
+  color: Color(0xEBF7F7F7),
+  darkColor: Color(0xEB202020),
 );
 
 void main() {
@@ -297,13 +297,16 @@ void main() {
 
   testWidgets('draws dark buttons in dark mode and light button in light mode', (WidgetTester tester) async {
     for (final Brightness brightness in Brightness.values) {
+      print('justin $brightness go');
       await tester.pumpWidget(
+        // TODO(justinmc): Try setting brightness in theme as 2 other cases to test.
         CupertinoApp(
           home: Center(
             child: Builder(
               builder: (BuildContext context) {
                 return MediaQuery(
-                  data: MediaQuery.of(context).copyWith(platformBrightness: brightness),
+                  //data: MediaQuery.of(context).copyWith(platformBrightness: brightness),
+                  data: MediaQuery.of(context).copyWith(platformBrightness: Brightness.light),
                   child: CupertinoTextSelectionToolbar(
                     anchorAbove: const Offset(100.0, 0.0),
                     anchorBelow: const Offset(100.0, 0.0),
@@ -322,11 +325,25 @@ void main() {
       );
 
       final Finder buttonFinder = find.byType(CupertinoButton);
-      expect(find.byType(CupertinoButton), findsOneWidget);
-      final CupertinoButton button = tester.widget(buttonFinder);
+      expect(buttonFinder, findsOneWidget);
+      //final CupertinoButton button = tester.widget(buttonFinder);
+
+      final Finder decorationFinder = find.descendant(
+        of: find.byType(CupertinoButton),
+        matching: find.byType(DecoratedBox)
+      );
+      expect(decorationFinder, findsOneWidget);
+      final DecoratedBox decoratedBox = tester.widget(decorationFinder);
+      final BoxDecoration boxDecoration = decoratedBox.decoration as BoxDecoration;
+
+      //print('justin ${button.color!.value} should be one of ${_kToolbarBackgroundColor.color.value} or ${_kToolbarBackgroundColor.darkColor.value}');
       expect(
-        button.color,
-        _kToolbarBackgroundColor,
+        //button.color!.value,
+        boxDecoration.color!.value,
+        brightness == Brightness.light
+            ? _kToolbarBackgroundColor.color.value
+            : _kToolbarBackgroundColor.darkColor.value,
+        reason: 'brigtness: $brightness',
       );
     }
   }, skip: kIsWeb); // [intended] We do not use Flutter-rendered context menu on the Web.
